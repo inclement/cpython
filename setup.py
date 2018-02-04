@@ -16,7 +16,7 @@ from distutils.command.install_lib import install_lib
 from distutils.command.build_scripts import build_scripts
 from distutils.spawn import find_executable
 
-cross_compiling = "_PYTHON_HOST_PLATFORM" in os.environ
+cross_compiling = bool(sysconfig.get_host_platform())
 
 # Add special CFLAGS reserved for building the interpreter and the stdlib
 # modules (Issue #21121).
@@ -31,8 +31,9 @@ sys.modules['concurrent.futures.process'] = Dummy
 
 def get_platform():
     # cross build
-    if "_PYTHON_HOST_PLATFORM" in os.environ:
-        return os.environ["_PYTHON_HOST_PLATFORM"]
+    host_platform = sysconfig.get_host_platform()
+    if host_platform:
+        return host_platform
     # Get value of sys.platform
     if sys.platform.startswith('osf1'):
         return 'osf1'
