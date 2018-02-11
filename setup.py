@@ -7,6 +7,7 @@ import importlib._bootstrap
 import importlib.util
 import sysconfig
 
+from sysconfig import cross_compiling
 from distutils import log
 from distutils.errors import *
 from distutils.core import Extension, setup
@@ -15,8 +16,6 @@ from distutils.command.install import install
 from distutils.command.install_lib import install_lib
 from distutils.command.build_scripts import build_scripts
 from distutils.spawn import find_executable
-
-cross_compiling = bool(sysconfig.get_host_platform())
 
 # Add special CFLAGS reserved for building the interpreter and the stdlib
 # modules (Issue #21121).
@@ -30,10 +29,8 @@ class Dummy:
 sys.modules['concurrent.futures.process'] = Dummy
 
 def get_platform():
-    # cross build
-    host_platform = sysconfig.get_host_platform()
-    if host_platform:
-        return host_platform
+    if cross_compiling:
+        return sysconfig.get_cross_build_var('host_platform')
     # Get value of sys.platform
     if sys.platform.startswith('osf1'):
         return 'osf1'
