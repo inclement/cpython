@@ -75,6 +75,8 @@ New Features
 Other Language Changes
 ======================
 
+* Added support of ``\N{name}`` escapes in :mod:`regular expressions <re>`.
+  (Contributed by Jonathan Eunice and Serhiy Storchaka in :issue:`30688`.)
 
 
 New Modules
@@ -130,3 +132,26 @@ Changes in the Python API
   arguments for changing the selection was deprecated in Python 3.6.  Use
   specialized methods like :meth:`~tkinter.ttk.Treeview.selection_set` for
   changing the selection.  (Contributed by Serhiy Storchaka in :issue:`31508`.)
+
+* A :mod:`dbm.dumb` database opened with flags ``'r'`` is now read-only.
+  :func:`dbm.dumb.open` with flags ``'r'`` and ``'w'`` no longer creates
+  a database if it does not exist.
+  (Contributed by Serhiy Storchaka in :issue:`32749`.)
+
+
+CPython bytecode changes
+------------------------
+
+* The interpreter loop  has been simplified by moving the logic of unrolling
+  the stack of blocks into the compiler.  The compiler emits now explicit
+  instructions for adjusting the stack of values and calling the cleaning
+  up code for :keyword:`break`, :keyword:`continue` and :keyword:`return`.
+
+  Removed opcodes :opcode:`BREAK_LOOP`, :opcode:`CONTINUE_LOOP`,
+  :opcode:`SETUP_LOOP` and :opcode:`SETUP_EXCEPT`.  Added new opcodes
+  :opcode:`ROT_FOUR`, :opcode:`BEGIN_FINALLY`, :opcode:`CALL_FINALLY` and
+  :opcode:`POP_FINALLY`.  Changed the behavior of :opcode:`END_FINALLY`
+  and :opcode:`WITH_CLEANUP_START`.
+
+  (Contributed by Mark Shannon, Antoine Pitrou and Serhiy Storchaka in
+  :issue:`17611`.)
