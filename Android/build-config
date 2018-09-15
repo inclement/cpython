@@ -17,8 +17,8 @@ build_config_error ()
 ! test -d "$ANDROID_NDK_ROOT" && build_config_error "\$ANDROID_NDK_ROOT ($ANDROID_NDK_ROOT) is not a directory."
 version=$(cat "$ANDROID_NDK_ROOT/source.properties" | \
     sed -e "s/^.*Pkg.Revision[ \t]*=[ \t]*\([0-9]\+\).*$\|^.*$/\1/" -e "/^$/d")
-test "$version" != $ndk_version &&
-    build_config_error "The installed NDK version is $version but version $ndk_version is required."
+# test "$version" != $ndk_version &&
+#     # build_config_error "The installed NDK version is $version but version $ndk_version is required."
 unset ndk_version version
 
 test $((ANDROID_API)) -lt 21 && \
